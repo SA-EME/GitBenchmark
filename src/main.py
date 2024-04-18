@@ -2,7 +2,7 @@ from config import init_config
 from arguments.index import parser
 
 NAME="GitBenchmark"
-VERSION="0.1.0"
+VERSION="0.2.0"
 
 def help_function():
     print(f"{NAME} {VERSION}")

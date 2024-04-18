@@ -1,0 +1,32 @@
+[type.breaking]
+version = "major"
+
+[type.feat]
+version = "minor"
+
+[type.chore]
+version = "patch"
+
+[type.fix]
+version = "patch"
+
+[type.ci]
+version = "patch"
+
+[type.docs]
+version = "patch"
+
+[type.perf]
+version = "patch"
+
+[type.refactor]
+version = "patch"
+
+[type.style]
+version = "patch"
+
+[type.test]
+version = "patch"
+
+[scope.project.files.main]
+path = "src/main.py"
