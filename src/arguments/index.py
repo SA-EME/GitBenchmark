@@ -2,6 +2,7 @@ import argparse
 
 
 from arguments.scope import scope_arguments
+from arguments.commit import commit_arguments
 
 parser = argparse.ArgumentParser(description="A command-line tool to help you to have compliance with your commit & easy the versioning.")
 subparsers = parser.add_subparsers(dest='command', help='Sub-command help')
@@ -12,5 +13,6 @@ parser_scope.add_argument('action', choices=['add', 'remove', 'list'], help='The
 parser_scope.add_argument('params', nargs='*', default=None, help='The scope to add or remove')
 parser_scope.set_defaults(func=scope_arguments)
 
-
-
+parser_commit = subparsers.add_parser('commit', help='Config type help')
+parser_commit.add_argument('params', nargs='*', default=None, help='The type to add or remove')
+parser_commit.set_defaults(func=commit_arguments)
