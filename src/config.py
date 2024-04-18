@@ -24,6 +24,20 @@ def init_config():
         print(f"[red]error: {error}[/red]")
 
 
+def get_subsection(prefix):
+    global config_path
+    config = toml.load(config_path)
+
+    keys = prefix.split('.')
+
+    for k in keys:
+        if isinstance(config, dict):
+            config = config.get(k)
+        else:
+            return []
+    
+    return list(config.keys())
+
 def get_section(section):
     global config_path
     config = toml.load(config_path)
@@ -56,13 +70,33 @@ def remove_section(section):
         print(f"Section '{section}' not found in the config file.")
 
 
+#def get_value(key):
+#    """
+#    Get a value from the config file
+#    """
+#    global config_path
+#    config = toml.load(config_path)
+#    return config.get(key, [])
+
 def get_value(key):
     """
     Get a value from the config file
     """
     global config_path
     config = toml.load(config_path)
-    return config.get(key, [])
+    
+    # Split the key into its components
+    keys = key.split('.')
+    
+    # Traverse the config dictionary using the keys
+    for k in keys:
+        if isinstance(config, dict):
+            config = config.get(k, [])
+        else:
+            return []
+    
+    return config
+
 
 
 def set_value(key: str, value):
