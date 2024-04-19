@@ -24,7 +24,7 @@ def replace_version(file_path, pattern, new_version):
     with open(file_path, 'r') as file:
         filedata = file.read()
 
-    filedata = re.sub(pattern, lambda m: m.group(1) + new_version + '"', filedata)
+    filedata = re.sub(pattern, lambda m: m.group(1) + new_version, filedata)
 
     with open(file_path, 'w') as file:
         file.write(filedata)

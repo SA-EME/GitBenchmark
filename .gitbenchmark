@@ -31,8 +31,16 @@ version = "patch"
 
 [scope.project.files.main]
 path = "src/main.py"
-pattern = '(VERSION=")([^"]*)"'
+pattern = '(VERSION=\")([^\"]*)'
+
+[scope.project.files.readme]
+path = "readme.md"
+pattern = '(GB-)([^-%]*)'
 
 [scope.commit.files.main]
 path = "src/main.py"
-pattern = '(VERSION=")([^"]*)"'
+pattern = '(VERSION=\")([^\"]*)'
+
+[scope.commit.files.readme]
+path = "readme.md"
+pattern = '(GB-)([^-%]*)'
