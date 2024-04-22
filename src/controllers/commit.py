@@ -5,10 +5,10 @@ from version import change_version, get_version, replace_version
 from rich import print
 
 def main_branch() -> str:
-    main = execute_command("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
-    if main:
-        return main
-    return 'main'
+    main = execute_command("git symbolic-ref refs/remotes/origin/HEAD")
+    if 'fatal' in main:
+        return 'main'
+    return main.split('/')[-1].strip()
 
 
 def difference_to_remote() -> str:
@@ -33,9 +33,7 @@ def commit(_type, scope, message) -> Union[dict,None]:
     version_type = get_value(f"type.{_type}.version")
 
     for s in list(scope):
-        print(s)
         files = get_subsection(f"scope.{s}.files")
-        print("test")
         for f in files:
             path = get_value(f"scope.{s}.files.{f}.path")
             pattern = get_value(f"scope.{s}.files.{f}.pattern")
@@ -49,10 +47,11 @@ def commit(_type, scope, message) -> Union[dict,None]:
                 replace_version(path, pattern, new_version)
                 print("nv " + new_version)
             except Exception as e:
-                print(f"[red]Error on the regex[/red]")
-                print(e)
+                print(f"[red]Error on the regex for {s} {path}[/red]")
+                print(repr(e))
+                return
             execute_command(f"git add {path}")
-        
+
     if type(scope)== list:
         scope = '|'.join(scope)
     message = ' | '.join(message)
