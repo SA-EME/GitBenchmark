@@ -1,0 +1,1 @@
+python -m PyInstaller --onefile --distpath=dist --workpath=build --specpath=spec --name=gitbenchmark src/main.py --clean --hidden-import toml
