@@ -1,5 +1,6 @@
 import inquirer
 from controllers.commit import commit, check_commit
+from validators.commit import commit_message_validator
 from config import get_section
 
 def commit_arguments(args):
@@ -29,7 +30,7 @@ def commit_arguments(args):
         message = []
         for sc in scope:
             message_question = inquirer.Text('message', message=f"What's the message of the commit for {sc}",
-                                              validate=lambda _, x: len(x) > 0)
+                                              validate=commit_message_validator)
             message_answer = inquirer.prompt([message_question])
             message.append(str(message_answer['message']).strip())
 

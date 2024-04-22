@@ -60,4 +60,4 @@ def commit(_type, scope, message) -> Union[dict,None]:
     commit_message = f"{_type}({scope}): {message}"
     print(commit_message)
 
-    execute_command(f"git commit -m '{commit_message}'")
+    execute_command(f"git commit -m \"{commit_message}\"")
