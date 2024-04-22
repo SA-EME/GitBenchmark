@@ -1,5 +1,5 @@
 import inquirer
-from controllers.commit import commit, check_commit
+from controllers.commit import commit, check_commit, check_new_commits
 from validators.commit import commit_message_validator
 from config import get_section
 

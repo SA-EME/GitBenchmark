@@ -5,8 +5,18 @@ class VERSION(Enum):
     PATCH = "patch"
     MINOR = "minor"
     MAJOR = "major"
-    
-def get_version(file_path, pattern):
+
+def get_version(message, pattern):
+    """
+    Get the version from the message.
+    """
+    match = re.search(pattern, message)
+    if match:
+        return match.group(2)
+    return None
+
+
+def get_version_by_file(file_path, pattern):
     """
     Get the version from the file.
     """
@@ -45,5 +55,6 @@ def change_version(old_version: str, commit_version: str):
     return '.'.join(old_version)
 
 class PATTERN(Enum):
-    NODE = "(\"version\"\\s*:\\s*\")([^\"]*)\"",
-    PYTHON = '(VERSION=")([^"]*)"'
+    NODE = "(\"version\"\\s*:\\s*\")([^\"]*)",
+    PYTHON = "(VERSION=\")([^\"]*)\""
+    #README = "(version )(\d+\.\d+\.\d+)"

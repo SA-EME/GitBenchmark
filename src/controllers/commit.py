@@ -1,7 +1,7 @@
 from typing import Union
 from config import get_value, get_subsection
 from utils import execute_command
-from version import change_version, get_version, replace_version
+from version import change_version, get_version, get_version_by_file, replace_version
 from rich import print
 
 def main_branch() -> str:
@@ -16,6 +16,42 @@ def difference_to_remote() -> str:
     execute_command(f"git remote update")
     return execute_command(f"git diff {main} origin/{main}")
 
+def check_new_commits() -> bool:
+    """
+    Check for new commits in all remote branches.
+    """
+    execute_command("git fetch")
+
+    remote_branches = execute_command("git branch -r").split('\n')
+
+    for branch in remote_branches:
+        if '->' in branch:
+            continue
+        branch = branch.strip()
+        new_commits = execute_command(f"git log HEAD..{branch} --oneline")
+
+        if new_commits:
+            print(f"La branche {branch} a de nouveaux commits :")
+            print(new_commits)
+            return True
+    return False
+
+def get_latest_commit_branch() -> str:
+    """
+    Get the branch with the latest commit.
+    """
+    latest_branch = execute_command("git for-each-ref --sort=-committerdate refs/remotes --format='%(committerdate:short) %(refname:short)'").split('\n')[0]
+
+    return latest_branch.split(' ')[1]
+
+def get_file_content(commit: str, file_path: str) -> str:
+    """
+    Get the content of a file at a specific commit.
+    """
+    file_content = execute_command(f"git show {commit}:{file_path}")
+
+    return file_content
+
 
 def check_commit() -> bool:
     output = execute_command("git diff --cached ")
@@ -28,9 +64,26 @@ def check_commit() -> bool:
         return False
     return True
 
+def get_latest_commit(branch: str) -> str:
+    """
+    Get the latest commit on a specific branch.
+    """
+    latest_commit = execute_command(f"git rev-parse {branch}")
+
+    return latest_commit
+
 def commit(_type, scope, message) -> Union[dict,None]:
 
     version_type = get_value(f"type.{_type}.version")
+    
+    # TODO check if the last commit is the same as the current one
+    commit_hash = None
+    
+    if check_new_commits():
+        last_branch = get_latest_commit_branch()
+        print(last_branch)
+        commit_hash = get_latest_commit(last_branch)
+        print(commit_hash)
 
     for s in list(scope):
         files = get_subsection(f"scope.{s}.files")
@@ -38,7 +91,15 @@ def commit(_type, scope, message) -> Union[dict,None]:
             path = get_value(f"scope.{s}.files.{f}.path")
             pattern = get_value(f"scope.{s}.files.{f}.pattern")
             try :
-                old_version: str = get_version(path, pattern)
+                if commit_hash:
+                    commit_content = get_file_content(commit_hash, path)
+                    if commit_content:
+                        print('[yellow]get version from last commit[/yellow]')
+                        old_version: str = get_version(commit_content, pattern)
+                    else:
+                        old_version: str = get_version_by_file(path, pattern)
+                else:
+                    old_version: str = get_version_by_file(path, pattern)
                 print("ov " + old_version)
                 if old_version is None:
                     print(f"[red]Can't find version in {path} with pattern {pattern}[/red]")
@@ -61,3 +122,4 @@ def commit(_type, scope, message) -> Union[dict,None]:
     print(commit_message)
 
     execute_command(f"git commit -m \"{commit_message}\"")
+    execute_command(f"git push")
