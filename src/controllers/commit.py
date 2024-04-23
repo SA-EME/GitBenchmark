@@ -36,13 +36,13 @@ def check_new_commits() -> bool:
             return True
     return False
 
-def get_latest_commit_branch() -> str:
+def get_latest_commit() -> str:
     """
-    Get the branch with the latest commit.
+    Get latest commit.
     """
-    latest_branch = execute_command("git for-each-ref --sort=-committerdate refs/remotes --format='%(committerdate:short) %(refname:short)'").split('\n')[0]
+    latest_branch = execute_command("git for-each-ref --sort=-committerdate refs/remotes").split('\n')[0]
 
-    return latest_branch.split(' ')[1]
+    return latest_branch.split(' ')[0]
 
 def get_file_content(commit: str, file_path: str) -> str:
     """
@@ -64,25 +64,16 @@ def check_commit() -> bool:
         return False
     return True
 
-def get_latest_commit(branch: str) -> str:
-    """
-    Get the latest commit on a specific branch.
-    """
-    latest_commit = execute_command(f"git rev-parse {branch}")
-
-    return latest_commit
 
 def commit(_type, scope, message) -> Union[dict,None]:
 
     version_type = get_value(f"type.{_type}.version")
-    
+
     # TODO check if the last commit is the same as the current one
     commit_hash = None
-    
+
     if check_new_commits():
-        last_branch = get_latest_commit_branch()
-        print(last_branch)
-        commit_hash = get_latest_commit(last_branch)
+        commit_hash = get_latest_commit()
         print(commit_hash)
 
     for s in list(scope):
