@@ -1,7 +1,7 @@
 <h1 align=center>Git Benchmark</h1>
 
 <p align=center>
-  <a href="https://github.com/SA-EME/GitBenchmark"><img src="https://img.shields.io/badge/GB-0.6.0-%23f7df1e?style=for-the-badge" alt="FG"/></a>
+  <a href="https://github.com/SA-EME/GitBenchmark"><img src="https://img.shields.io/badge/GB-0.6.1-%23f7df1e?style=for-the-badge" alt="FG"/></a>
   <img src="https://img.shields.io/badge/LANGUAGE-PYTHON-ad2828?style=for-the-badge" alt="JS"/>
 </p>
 
