@@ -1,5 +1,5 @@
 import inquirer
-from controllers.scope import add, remove, show, modify
+from controllers.scope import add, remove, show, check
 from validators.scope import file_validator, exist_validator, not_exist_validator
 from config import get_section
 from version import PATTERN
@@ -26,7 +26,13 @@ def scope_arguments(args):
         if len(args.params) >= 1:
             name = args.params[0]
         else:
-            name = inquirer.prompt([inquirer.List('name', message="What's the name of the scope ?", choices=get_section("scope"))])["name"]
+            name = inquirer.prompt([inquirer.List('name', message="Which scope do you want to remove ?", choices=get_section("scope"))])["name"]
         remove(name)
+    elif args.action == 'check':
+        if len(args.params) >= 1:
+            name = args.params[0]
+        else:
+            name = inquirer.prompt([inquirer.List('name', message="Which scope do you want to test ?", choices=get_section("scope"))])["name"]
+        check(name)
     elif args.action == 'list':
         show()

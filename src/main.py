@@ -4,7 +4,7 @@ from rich import print
 from arguments.index import parser, COMMAND_WITHOUT_CONFIG
 
 NAME="GitBenchmark"
-VERSION="0.7.1"
+VERSION="0.8.0"
 
 def help_function():
     print(f"{NAME} {VERSION}")

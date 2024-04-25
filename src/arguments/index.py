@@ -18,7 +18,7 @@ parser_init = subparsers.add_parser('init', help='Init gitbenchmark')
 parser_init.set_defaults(func=init_arguments)
 
 parser_scope = subparsers.add_parser('scope', help='Config scope help')
-parser_scope.add_argument('action', choices=['add', 'remove', 'list'], help='The action to perform on the scope')
+parser_scope.add_argument('action', choices=['add', 'remove', 'list', 'check'], help='The action to perform on the scope')
 parser_scope.add_argument('params', nargs='*', default=None, help='The scope to add or remove')
 parser_scope.set_defaults(func=scope_arguments)
 
