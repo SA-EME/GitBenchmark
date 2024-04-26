@@ -1,3 +1,6 @@
+[type.release]
+version = "major"
+
 [type.breaking]
 version = "major"
 
@@ -28,19 +31,12 @@ version = "patch"
 [type.test]
 version = "patch"
 
+[scope.project]
 
-[scope.project.files.main]
+[scope.command.files.main]
 path = "src/main.py"
 pattern = '(VERSION=\")([^\"]*)'
 
-[scope.project.files.readme]
+[scope.command.files.readme]
 path = "readme.md"
-pattern = '(GB-)([^-%]*)'
-
-[scope.commit.files.main]
-path = "src/main.py"
-pattern = '(VERSION=\")([^\"]*)'
-
-[scope.commit.files.readme]
-path = "readme.md"
-pattern = '(GB-)([^-%]*)'
+pattern = "(GB-)([^-%]*)"

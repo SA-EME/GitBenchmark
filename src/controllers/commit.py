@@ -77,7 +77,10 @@ def commit(_type, scope, message) -> Union[dict,None]:
         print(commit_hash)
 
     for s in list(scope):
-        files = get_subsection(f"scope.{s}.files")
+        try:
+            files = get_subsection(f"scope.{s}.files")
+        except Exception as e:
+            continue # No files for this scope
         for f in files:
             path = get_value(f"scope.{s}.files.{f}.path")
             pattern = get_value(f"scope.{s}.files.{f}.pattern")
@@ -99,7 +102,7 @@ def commit(_type, scope, message) -> Union[dict,None]:
                 replace_version(path, pattern, new_version)
                 print("nv " + new_version)
             except Exception as e:
-                print(f"[red]Error on the regex for {s} {path}[/red]")
+                print(f"[red]Error on changement of version for scope {s} and file {path}[/red]")
                 print(repr(e))
                 return
             execute_command(f"git add {path}")
@@ -109,7 +112,7 @@ def commit(_type, scope, message) -> Union[dict,None]:
     message = ' | '.join(message)
 
 
-    commit_message = f"{_type}({scope}): {message}"
+    commit_message = f"{_type}({scope}): {message}".lower()
     print(commit_message)
 
     execute_command(f"git commit -m \"{commit_message}\"")
