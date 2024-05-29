@@ -58,15 +58,16 @@ def change_version(old_version: str, commit_version: str):
         old_version[-1] = str(int(old_version[-1]) + 1)
         if len(old_version) == 4:
             old_version = old_version[:-1]
-        old_version = old_version[:-1]
     elif commit_version == VERSION.MINOR.value:
         old_version[-2] = str(int(old_version[-2]) + 1)
         old_version[-1] = '0'
-        old_version = old_version[:-1]
+        if len(old_version) == 4:
+            old_version = old_version[:-1]
     elif commit_version == VERSION.MAJOR.value:
         old_version[-3] = str(int(old_version[-3]) + 1)
         old_version[-2] = old_version[-1] = '0'
-        old_version = old_version[:-1]
+        if len(old_version) == 4:
+            old_version = old_version[:-1]
     return '.'.join(old_version)
 
 

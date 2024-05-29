@@ -6,12 +6,14 @@ from arguments.index import parser, COMMAND_WITHOUT_CONFIG
 from version import get_version
 from utils.process import execute_command
 
-NAME="GitBenchmark"
-VERSION="0.8"
+NAME = "GitBenchmark"
+VERSION = "0.8.4"
+
 
 def help_function():
     print(f"{NAME} {VERSION}")
     parser.print_help()
+
 
 def requirements():
     git = execute_command("git --version")
@@ -27,8 +29,10 @@ def requirements():
 
 if __name__ == "__main__":
     requirements()
-    parser.add_argument('--version', action='version', version=f"{NAME} {VERSION}")
-    parser.add_argument('--config', type=str, default=None, help='Chemin vers le fichier de configuration')
+    parser.add_argument('--version', action='version',
+                        version=f"{NAME} {VERSION}")
+    parser.add_argument('--config', type=str, default=None,
+                        help='Chemin vers le fichier de configuration')
     args = parser.parse_args()
     if args.config:
         config = load_config(args.config)
