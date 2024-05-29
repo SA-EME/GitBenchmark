@@ -35,7 +35,7 @@ version = "patch"
 
 [scope.command.files.main]
 path = "src/main.py"
-pattern = '(VERSION=\")([^\"]*)'
+pattern = '(VERSION = \")([^\"]*)'
 
 [scope.command.files.readme]
 path = "readme.md"
