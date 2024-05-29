@@ -1,13 +1,13 @@
-from config import config
+from config import config, load_config
 from rich import print
 
 from arguments.index import parser, COMMAND_WITHOUT_CONFIG
 
 from version import get_version
-from utils import execute_command
+from utils.process import execute_command
 
 NAME="GitBenchmark"
-VERSION="0.8.1"
+VERSION="0.8.2.0"
 
 def help_function():
     print(f"{NAME} {VERSION}")
@@ -28,7 +28,12 @@ def requirements():
 if __name__ == "__main__":
     requirements()
     parser.add_argument('--version', action='version', version=f"{NAME} {VERSION}")
+    parser.add_argument('--config', type=str, default=None, help='Chemin vers le fichier de configuration')
     args = parser.parse_args()
+    if args.config:
+        config = load_config(args.config)
+        if config is None:
+            print("[red]Aucune configuration trouvée, avec le flag --config[/red]")
     if args.command not in COMMAND_WITHOUT_CONFIG and config is None:
         print("[red]Aucune configuration trouvée, utilisée gb init.[/red]")
     elif 'func' in args:
