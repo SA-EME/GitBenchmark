@@ -7,6 +7,7 @@ from arguments.build import build_arguments
 from arguments.scope import scope_arguments
 from arguments.commit import commit_arguments
 from arguments.type import type_arguments
+from arguments.merge import merge_arguments
 
 
 COMMAND_WITHOUT_CONFIG = ['init', '--version']
@@ -20,7 +21,8 @@ parser_init = subparsers.add_parser('init', help='Init gitbenchmark')
 parser_init.set_defaults(func=init_arguments)
 
 parser_build = subparsers.add_parser('build', help='Build help')
-parser_build.add_argument('params', nargs='*', default=None, help='The scope to add or remove')
+parser_build.add_argument(
+    'params', nargs='*', default=None, help='The scope to add or remove')
 parser_build.set_defaults(func=build_arguments)
 
 parser_scope = subparsers.add_parser('scope', help='Config scope help')
@@ -41,3 +43,7 @@ parser_commit = subparsers.add_parser('commit', help='Config type help')
 parser_commit.add_argument(
     'params', nargs='*', default=None, help='The type to add or remove')
 parser_commit.set_defaults(func=commit_arguments)
+
+
+parser_merge = subparsers.add_parser('merge', help='Config merge help')
+parser_merge.set_defaults(func=merge_arguments)
