@@ -7,7 +7,7 @@ from version import get_version
 from utils.process import execute_command
 
 NAME = "GitBenchmark"
-VERSION = "0.8.4"
+VERSION = "0.8.5"
 
 
 def help_function():
