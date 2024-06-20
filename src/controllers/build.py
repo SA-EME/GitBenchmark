@@ -21,15 +21,13 @@ def build(scope):
             old_version: str = get_version_by_file(path, pattern)
             print("ov " + old_version)
             if old_version is None:
-                print(f"[red]Can't find version in {
-                      path} with pattern {pattern}[/red]")
+                print(f"[red]Can't find version in {path} with pattern {pattern}[/red]")
                 return 0
             new_version = change_version(old_version, version_type)
             replace_version(path, pattern, new_version)
             print("nv " + new_version)
         except Exception as e:
-            print(f"[red]Error on changement of version for scope {
-                  scope} and file {path}[/red]")
+            print(f"[red]Error on changement of version for scope {scope} and file {path}[/red]")
             print(repr(e))
             return 0
     return 1
