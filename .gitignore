@@ -1,0 +1,21 @@
+# application
+.env
+log.json
+
+# virtualenv
+venv/
+
+# build
+build/
+dist/
+
+# python
+__pycache__/
+
+log.json
+
+# poetry
+poetry.lock
+
+# ruff
+.ruff_cache/
