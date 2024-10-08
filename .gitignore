@@ -1,6 +1,7 @@
 # application
 .env
 log.json
+stacktrace.json
 
 # virtualenv
 venv/
@@ -19,3 +20,7 @@ poetry.lock
 
 # ruff
 .ruff_cache/
+
+
+# vscode
+temp/
