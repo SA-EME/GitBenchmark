@@ -21,7 +21,7 @@ class CommandManager:
         self.commands = []
         self.load_commands()
 
-        # Charger les plugins si nécessaire
+        # Load plugins
         self.plugins = load_plugins()
         for plugin in self.plugins.values():
             self.commands.extend(plugin.register_commands())
@@ -30,12 +30,8 @@ class CommandManager:
         """
         Dynamically load all orders and save them in the system.
         """
-        # Charger les commandes dynamiquement
-        from commands.config.init import InitConfigCommand  # pylint: disable=C
-        from commands.make.init import InitMakeCommand  # pylint: disable=C
-
-        self.load_command(InitConfigCommand)
-        self.load_command(InitMakeCommand)
+        # Load default commands
+        pass
 
     def load_command(self, command_class):
         """

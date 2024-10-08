@@ -49,5 +49,6 @@ def get_env(key: str, required=False, default=None, cast=None, **kwargs):
             sys.exit(1)
     return value
 
+
 LOG_LEVEL: str = get_env("LOG_LEVEL", True, "INFO", str)
 LOG_FILE: str = get_env("LOG_FILE", False, None, str)
