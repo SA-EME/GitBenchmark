@@ -6,41 +6,46 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 
-import argparse
+@dataclass
+class CommandName:
+    """
+    Every command root name.
+    """
+    make: str = "make"
+    config: str = "config"
 
-from __config__ import NAME, VERSION
 
-from commands.manager import CommandManager
+ROOT_COMMANDS = CommandName()
 
-# create the top-level parser
-parser = argparse.ArgumentParser(description=f"{NAME} {VERSION}")
-parser.add_argument('-v', '--version', action='version', version=f"{NAME} {VERSION}")
 
-# create subparsers
-subparsers = parser.add_subparsers(dest='command')
+class BaseCommand(ABC):
+    """
+    Next command class.
+    """
+    COMMAND_NAME = ''
+    COMMAND_DESCRIPTION = ''
+    COMMAND_ARGS = []
+    COMMAND_FLAGS = []
 
-# create the command manager
-manager = CommandManager()
+    @abstractmethod
+    def run(self, args):
+        """
+        Run the command.
+        """
+        self.register()
 
-# add commands to the parser
-for command_name, command_details in manager.commands.items():
-    command_parser = subparsers.add_parser(command_name, help=f"{command_name} command")
+    @abstractmethod
+    def register(self):
+        """
+        Register the command.
+        """
 
-    # add flags and args which are specified in the command class to the parser
-    if "flags" in command_details:
-        for flag in command_details["flags"]:
-            command_parser.add_argument(flag["name"], action=flag["action"], help=flag["help"])
-
-    if "args" in command_details:
-        for arg in command_details["args"]:
-            command_parser.add_argument(arg["name"], help=arg["help"])
-
-# initialize the parser
-args = parser.parse_args()
-
-if args.command:
-    manager.run_command(args.command, args)
-else:
-    parser.print_help()
+    @abstractmethod
+    def rollback(self):
+        """
+        Rollback the command.
+        """

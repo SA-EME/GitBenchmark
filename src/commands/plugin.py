@@ -10,10 +10,15 @@ import os
 import sys
 import logging
 
+from abc import ABC, abstractmethod
+
 import importlib.util
 
+# used to export the BaseCommand class and ROOT_COMMANDS to use them in the plugins
+from commands.base import BaseCommand as BaseCommand, ROOT_COMMANDS as ROOT_COMMANDS # noqa # pylint: disable=unused-import
 
-class GBPlugin:
+
+class GBPlugin(ABC):
     """
     Base class for plugins.
     This class should be inherited by all plugins.
@@ -23,11 +28,12 @@ class GBPlugin:
         self.name = None
         self.description = None
 
+    @abstractmethod
     def register_commands(self):
         """
         Register the commands for the plugin.
         """
-        raise NotImplementedError
+        raise NotImplementedError("register_commands method must be implemented in the plugin class.")
 
 
 def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
@@ -62,7 +68,7 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
                     logging.error("Erreur lors du chargement du plugin %s: %s", plugin_name, e)
                     continue
 
-                # Find the plugin class which inherits from PluginBase
+                # Find the plugin class which inherits from GBPlugin
                 plugin_class = None
                 for attr_name in dir(module):
                     attr = getattr(module, attr_name)
