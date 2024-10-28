@@ -10,3 +10,5 @@
 
 NAME = "GitBenchmark"
 VERSION = "0.0.0"
+
+PATH = ".gitbenchmark"

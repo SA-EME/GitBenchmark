@@ -14,6 +14,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import colorlog
 
+from __config__ import PATH
 from env import LOG_LEVEL, LOG_FILE
 
 try:
@@ -41,7 +42,7 @@ try:
     logger.addHandler(console_handler)
 
     if LOG_FILE:
-        log_path = os.path.join(os.getcwd())
+        log_path = os.path.join(os.getcwd(), PATH)
         file_handler = RotatingFileHandler(
             os.path.join(log_path, 'app.log'),
             maxBytes=100000000,

@@ -1,7 +1,6 @@
 # application
+.gitbenchmark/
 .env
-log.json
-stacktrace.json
 
 # virtualenv
 venv/

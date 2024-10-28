@@ -6,11 +6,13 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
-
+import os
 import json
 import logging
 
 from datetime import datetime
+
+from __config__ import PATH
 
 # Default structure for the stacktrace file
 DEFAULT = {
@@ -33,7 +35,7 @@ class StackTraceManager:
         Args:
             log_file (str): The file path where stacktrace will be saved. Defaults to 'stacktrace.json'.
         """
-        self.log_file = log_file
+        self.log_file = os.path.join(os.getcwd(), PATH, log_file)
         self.logs = self._load_stacktrace()
 
     def _load_stacktrace(self):
@@ -69,7 +71,6 @@ class StackTraceManager:
             content (str, optional): Additional content or information about the log entry.
             category (str, optional): Type or category of the log (e.g., 'versioning', 'rollback').
         """
-        print("entro")
         log_entry = {
             "command": command,
             "status": status,
@@ -82,7 +83,6 @@ class StackTraceManager:
         if 'stacktrace' not in self.logs:
             self.logs["stacktrace"] = []
         self.logs["stacktrace"].append(log_entry)
-        print(self.logs)
         self._save_stacktrace()
 
     def get_actions_by_command(self, command):

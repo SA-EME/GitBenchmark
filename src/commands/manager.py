@@ -6,6 +6,7 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
+import os
 import logging
 
 from commands.base import ROOT_COMMANDS
@@ -52,6 +53,8 @@ class CommandManager:
                         command.COMMAND_ROOT, help=f"{command.COMMAND_ROOT} related commands"
                     ).add_subparsers(dest=f"{command.COMMAND_ROOT}_subcommand")
                 self.add_subcommands(root_parsers[command.COMMAND_ROOT], command)
+            else:
+                self.add_subcommands(subparsers, command)
 
     def add_subcommands(self, subparsers, command):
         """
@@ -59,7 +62,7 @@ class CommandManager:
         """
         subparser = subparsers.add_parser(command.COMMAND_NAME, help=command.COMMAND_DESCRIPTION)
         for arg in command.COMMAND_ARGS:
-            subparser.add_argument(arg["name"], help=arg["help"])
+            subparser.add_argument(arg["name"], help=arg["help"], nargs='?', default=None)
         for flag in command.COMMAND_FLAGS:
             subparser.add_argument(flag["name"], action=flag["action"], help=flag["help"])
         subparser.set_defaults(func=command.run)

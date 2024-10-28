@@ -46,7 +46,7 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
     plugins_path = os.path.join(os.getcwd(), plugin_directory)
 
     if not os.path.exists(plugins_path):
-        logging.info("Le répertoire des plugins %s n'existe pas.", plugins_path)
+        logging.info("The %s plugins directory does not exist.", plugins_path)
         return plugins
 
     # Load all plugins from the directory
@@ -65,7 +65,7 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
                     sys.modules[module_name] = module
                     spec.loader.exec_module(module)
                 except FileNotFoundError as e:
-                    logging.error("Erreur lors du chargement du plugin %s: %s", plugin_name, e)
+                    logging.error("Error loading plugin %s: %s", plugin_name, e)
                     continue
 
                 # Find the plugin class which inherits from GBPlugin
@@ -79,13 +79,13 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
                 if plugin_class is not None:
                     plugin_instance = plugin_class()
                     plugins[plugin_instance.name] = plugin_instance
-                    logging.debug("Plugin %s chargé avec succès !", plugin_instance.name)
+                    logging.debug("Plugin %s successfully loaded !", plugin_instance.name)
                 else:
-                    logging.warning("Aucune classe héritant de GBPlugin trouvée dans le plugin %s",
+                    logging.warning("No classes inheriting from GBPlugin found in the plugin %s",
                                     plugin_name)
 
             except ModuleNotFoundError as e:
-                logging.error("Erreur lors du chargement du plugin %s: %s", plugin_name, e)
+                logging.error("Error loading plugin %s: %s", plugin_name, e)
                 sys.exit(1)
 
     return plugins

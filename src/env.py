@@ -13,7 +13,22 @@ import logging
 
 from dotenv import load_dotenv
 
-dotenv_path = os.path.join(os.getcwd(), '.env')
+from __config__ import PATH
+
+
+default_env = """# Log
+LOG_LEVEL=WARN
+LOG_FILE=None
+
+# Repository
+PLATFORM=github
+TOKEN=YOUR_TOKEN
+URL=https://api.github.com
+OWNER=OWNER
+REPO=REPO
+"""
+
+dotenv_path = os.path.join(os.getcwd(), PATH, '.env')
 if os.path.isfile(dotenv_path):
     load_dotenv(dotenv_path)
 
@@ -52,3 +67,11 @@ def get_env(key: str, required=False, default=None, cast=None, **kwargs):
 
 LOG_LEVEL: str = get_env("LOG_LEVEL", True, "INFO", str)
 LOG_FILE: str = get_env("LOG_FILE", False, None, str)
+
+PLATFORM: str = get_env("PLATFORM", True, str).upper()
+TOKEN: str = get_env("TOKEN", True, str)
+URL: str = get_env("URL", True, str)
+OWNER: str = get_env("OWNER", True, str)
+REPO: str = get_env("REPO", True, str)
+
+OWN_REP: str = f"{OWNER}/{REPO}"
