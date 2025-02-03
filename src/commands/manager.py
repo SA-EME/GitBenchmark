@@ -32,7 +32,29 @@ class CommandManager:
         Dynamically load all orders and save them in the system.
         """
         # Load default commands
-        pass
+        from commands.config.init import InitConfigCommand  # pylint: disable=C
+
+
+        existing = os.path.exists(os.path.join('.gitbenchmark', '.env')) # TODO change this to proper method
+
+        self.load_command(InitConfigCommand)
+
+        if os.path.exists(os.path.join('.gitbenchmark', 'config.toml')): # TODO change this to proper method
+            from commands.make.init import InitMakeCommand  # pylint: disable=C
+            self.load_command(InitMakeCommand)
+
+        if existing:
+            from commands.make.commit import CommitMakeCommand  # pylint: disable=C
+            from commands.config.changelog import ChangelogConfigCommand  # pylint: disable=C
+            from commands.make.changelog import ChangelogCommand  # pylint: disable=C
+            from commands.make.release import ReleaseCommand  # pylint: disable=C
+
+
+            self.load_command(CommitMakeCommand)
+            self.load_command(ChangelogConfigCommand)
+            self.load_command(ChangelogCommand)
+            self.load_command(ReleaseCommand)
+
 
     def load_command(self, command_class):
         """

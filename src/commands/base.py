@@ -36,7 +36,9 @@ class BaseCommand(ABC):
     COMMAND_NAME = ''
     COMMAND_DESCRIPTION = ''
     COMMAND_ARGS = []
-    COMMAND_FLAGS = []
+    COMMAND_FLAGS = [
+        {"name": "--default", "action": "store_true", "help": "Use default values"},
+    ]
 
     def __setup_inquierer(self, args):
         """
@@ -44,6 +46,12 @@ class BaseCommand(ABC):
         """
         for arg in self.COMMAND_ARGS:
             arg_name = arg["name"]
+
+            # if default flag is present, skip inquirer
+            if 'default' in args:
+                if args.default:
+                    setattr(args, arg_name, arg.get("default"))
+                    pass
 
             # Check if argument is missing
             if not hasattr(args, arg_name) or getattr(args, arg_name) is None:

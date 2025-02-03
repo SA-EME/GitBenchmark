@@ -9,12 +9,10 @@
 
 import os
 import toml
+import logging
 
+from __config__ import PATH
 from config.schemas import Config
-
-
-class ConfigError(Exception):
-    """Custom exception for configuration errors."""
 
 
 def read_config(file_path) -> Config:
@@ -31,16 +29,17 @@ def read_config(file_path) -> Config:
         ConfigError: If the file does not exist or cannot be read.
     """
     if not os.path.exists(file_path):
-        raise ConfigError(f"Error: Configuration file '{file_path}' not found.")
+        logging.error("Error: Configuration file '%s' not found.", file_path)
 
     try:
         with open(file_path, 'r', encoding='utf8') as file:
             config_dict = toml.load(file)
-    except toml.TomlDecodeError:
-        raise ConfigError(f"Error: Failed to parse the TOML file '{file_path}'.")
+    except toml.TomlDecodeError as e:
+        logging.error("Error in config %s", e)
+        exit(0)
 
     return Config(**config_dict)
 
 
-CONFIG_FILE = '.gitbenchmark'
-config = read_config(CONFIG_FILE)
+CONFIG_FILE = 'config.toml'
+config = read_config(os.path.join(PATH, CONFIG_FILE))

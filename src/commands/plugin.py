@@ -46,7 +46,7 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
     plugins_path = os.path.join(os.getcwd(), plugin_directory)
 
     if not os.path.exists(plugins_path):
-        logging.info("The %s plugins directory does not exist.", plugins_path)
+        logging.debug("The %s plugins directory does not exist.", plugins_path)
         return plugins
 
     # Load all plugins from the directory
