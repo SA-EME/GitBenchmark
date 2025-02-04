@@ -18,6 +18,7 @@ class InitConfigCommand(BaseCommand):
     """
     Command class to initialize a new configuration file.
     """
+    REQUIRED_CONFIG = False
 
     COMMAND_ROOT = ROOT_COMMANDS.config
 

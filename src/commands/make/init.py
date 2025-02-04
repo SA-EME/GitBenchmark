@@ -18,6 +18,7 @@ class InitMakeCommand(BaseCommand):
     """
     Init command class.
     """
+    REQUIRED_CONFIG = False
 
     COMMAND_ROOT = ROOT_COMMANDS.make
 

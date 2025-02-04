@@ -12,6 +12,7 @@ from dataclasses import dataclass
 import subprocess
 import inquirer
 
+from config.index import config
 from stacktrace import stacktrace_manager
 
 @dataclass
@@ -30,6 +31,8 @@ class BaseCommand(ABC):
     """
     Next command class.
     """
+    REQUIRED_CONFIG = True
+
 
     COMMAND_ROOT = None
 
@@ -39,6 +42,8 @@ class BaseCommand(ABC):
     COMMAND_FLAGS = [
         {"name": "--default", "action": "store_true", "help": "Use default values"},
     ]
+
+    config = None
 
     def __setup_inquierer(self, args):
         """
@@ -93,6 +98,10 @@ class BaseCommand(ABC):
         Execute a command.
         """
         return subprocess.run(command, shell=True, check=True)
+
+    def __init__(self):
+        if self.REQUIRED_CONFIG:
+            self.config = config
 
     @abstractmethod
     def run(self, args):

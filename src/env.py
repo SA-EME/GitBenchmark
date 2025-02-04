@@ -67,12 +67,11 @@ def get_env(key: str, required=False, default=None, cast=None, **kwargs):
 
 LOG_LEVEL: str = get_env("LOG_LEVEL", True, "INFO", str)
 LOG_FILE: str = get_env("LOG_FILE", False, None, str)
-existing = os.path.exists(os.path.join('.gitbenchmark', '.env')) # TODO change this to proper method
-if existing:
-    PLATFORM: str = get_env("PLATFORM", True, str).upper()
-    TOKEN: str = get_env("TOKEN", True, str)
-    URL: str = get_env("URL", True, str)
-    OWNER: str = get_env("OWNER", True, str)
-    REPO: str = get_env("REPO", True, str)
 
-    OWN_REP: str = f"{OWNER}/{REPO}"
+PLATFORM: str = get_env("PLATFORM", True, "", str).upper()
+TOKEN: str = get_env("TOKEN", True, "", str)
+URL: str = get_env("URL", True, "", str)
+OWNER: str = get_env("OWNER", True, "", str)
+REPO: str = get_env("REPO", True, "", str)
+
+OWN_REP: str = f"{OWNER}/{REPO}"

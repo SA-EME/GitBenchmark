@@ -7,17 +7,15 @@
   file that was distributed with this source code.
 """
 
-from typing import List, Dict
+from typing import List, Dict, Any
 
 from pydantic import BaseModel
 
-
-class Files(BaseModel):
+class Version(BaseModel):
     """
-    Files object.
+    Version object.
     """
-    path: str
-    pattern: str
+    version: str
 
 
 class GitBenchmark(BaseModel):
@@ -28,11 +26,18 @@ class GitBenchmark(BaseModel):
     commit_message: str
     tag: str
 
+class Files(BaseModel):
+    """
+    Files object.
+    """
+    path: str
+    pattern: str
 
 class ConventionalCommits(BaseModel):
     """
     Conventional commits object.
     """
+    enabled: bool
     type: List[str]
 
 
@@ -68,6 +73,7 @@ class Config(BaseModel):
     Scope: Scope
     ChangeLog: ChangeLog
     GitBenchmark: GitBenchmark
+    Plugin: Dict[str, Dict[str, Any]]
 
 default_config = """
 [Version]
@@ -110,4 +116,6 @@ fixed=['fix']
 remove=['remove']
 deprecate=['depracate']
 security=['security']
+
+[Plugin]
 """

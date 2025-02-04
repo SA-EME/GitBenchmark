@@ -14,9 +14,11 @@ from abc import ABC, abstractmethod
 
 import importlib.util
 
+from __config__ import PATH
+
 # used to export the BaseCommand class and ROOT_COMMANDS to use them in the plugins
 from commands.base import BaseCommand as BaseCommand, ROOT_COMMANDS as ROOT_COMMANDS # noqa # pylint: disable=unused-import
-
+from config.index import config, update_config # noqa # pylint: disable=unused-import
 
 class GBPlugin(ABC):
     """
@@ -24,9 +26,13 @@ class GBPlugin(ABC):
     This class should be inherited by all plugins.
     """
 
-    def __init__(self):
-        self.name = None
+    def __init__(self, name: str = None):
+        """
+        Initialize the plugin.
+        """
+        self.name = name if name is not None else self.__class__.__name__
         self.description = None
+        self.config = config
 
     @abstractmethod
     def register_commands(self):
@@ -34,6 +40,17 @@ class GBPlugin(ABC):
         Register the commands for the plugin.
         """
         raise NotImplementedError("register_commands method must be implemented in the plugin class.")
+
+    def update_plugin_config(self, key: str, value):
+        """
+        Update the configuration for this plugin only.
+
+        Args:
+            key (str): The key to update within the plugin's section.
+            value (Any): The new value to set.
+        """
+        section = f"Plugin.{self.name}"
+        update_config(section, key, value)
 
 
 def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
@@ -43,7 +60,7 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
     plugins = {}
 
     # Get the path of the plugins directory
-    plugins_path = os.path.join(os.getcwd(), plugin_directory)
+    plugins_path = os.path.join(PATH, plugin_directory)
 
     if not os.path.exists(plugins_path):
         logging.debug("The %s plugins directory does not exist.", plugins_path)

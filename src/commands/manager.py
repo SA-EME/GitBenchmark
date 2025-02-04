@@ -6,7 +6,6 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
-import os
 import logging
 
 from commands.base import ROOT_COMMANDS
@@ -31,37 +30,33 @@ class CommandManager:
         """
         Dynamically load all orders and save them in the system.
         """
-        # Load default commands
-        from commands.config.init import InitConfigCommand  # pylint: disable=C
+        command_classes = [
+            ("commands.make.init", "InitMakeCommand"),
+            ("commands.config.init", "InitConfigCommand"),
+            ("commands.make.commit", "CommitMakeCommand"),
+            ("commands.config.changelog", "ChangelogConfigCommand"),
+            ("commands.make.changelog", "ChangelogCommand"),
+            ("commands.make.release", "ReleaseCommand"),
+        ]
 
+        for module_name, class_name in command_classes:
+            try:
+                module = __import__(module_name, fromlist=[class_name])
+                command_class = getattr(module, class_name)
 
-        existing = os.path.exists(os.path.join('.gitbenchmark', '.env')) # TODO change this to proper method
+                instance = command_class()
 
-        self.load_command(InitConfigCommand)
-
-        if os.path.exists(os.path.join('.gitbenchmark', 'config.toml')): # TODO change this to proper method
-            from commands.make.init import InitMakeCommand  # pylint: disable=C
-            self.load_command(InitMakeCommand)
-
-        if existing:
-            from commands.make.commit import CommitMakeCommand  # pylint: disable=C
-            from commands.config.changelog import ChangelogConfigCommand  # pylint: disable=C
-            from commands.make.changelog import ChangelogCommand  # pylint: disable=C
-            from commands.make.release import ReleaseCommand  # pylint: disable=C
-
-
-            self.load_command(CommitMakeCommand)
-            self.load_command(ChangelogConfigCommand)
-            self.load_command(ChangelogCommand)
-            self.load_command(ReleaseCommand)
+                self.load_command(instance)
+            except Exception as e:
+                logging.warning(f"⚠️ Skipping {class_name}: {e}")
 
 
     def load_command(self, command_class):
         """
         Load an order and save it in the system.
         """
-        command_instance = command_class()
-        self.commands.append(command_instance)
+        # command_instance = command_class()
+        self.commands.append(command_class)
 
     def add_commands_to_parser(self, subparsers):
         """
