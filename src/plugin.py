@@ -89,7 +89,8 @@ def load_plugins(plugin_directory="plugins") -> dict[str, GBPlugin]:
                 plugin_class = None
                 for attr_name in dir(module):
                     attr = getattr(module, attr_name)
-                    if (isinstance(attr, type) and issubclass(attr, GBPlugin) and attr is not GBPlugin):
+                    if (isinstance(attr, type) and 
+                        issubclass(attr, GBPlugin) and attr is not GBPlugin):
                         plugin_class = attr
                         break
 

@@ -33,7 +33,8 @@ class StackTraceManager:
         Initialize the StackTraceManager with a stacktrace file.
 
         Args:
-            log_file (str): The file path where stacktrace will be saved. Defaults to 'stacktrace.json'.
+            log_file (str): The file path where stacktrace will be saved.
+            Defaults to 'stacktrace.json'.
         """
         self.log_file = os.path.join(os.getcwd(), PATH, log_file)
         self.logs = self._load_stacktrace()
@@ -43,7 +44,8 @@ class StackTraceManager:
         Load stacktrace from the stacktrace file.
 
         Returns:
-            dict: The stacktrace loaded from the file, or default stacktrace if the file doesn't exist or is invalid.
+            dict: The stacktrace loaded from the file,
+            or default stacktrace if the file doesn't exist or is invalid.
         """
         try:
             with open(self.log_file, 'r', encoding='utf8') as file:

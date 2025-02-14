@@ -10,7 +10,7 @@ import logging
 
 from commands.base import ROOT_COMMANDS
 
-from commands.plugin import load_plugins
+from plugin import load_plugins
 
 
 class CommandManager:
@@ -31,13 +31,13 @@ class CommandManager:
         Dynamically load all orders and save them in the system.
         """
         command_classes = [
-            ("commands.rollback", "RollbackCommand"),
+            ("commands.make.rollback", "RollbackMakeCommand"),
             ("commands.make.init", "InitMakeCommand"),
             ("commands.config.init", "InitConfigCommand"),
             ("commands.make.commit", "CommitMakeCommand"),
             ("commands.config.changelog", "ChangelogConfigCommand"),
-            ("commands.make.changelog", "ChangelogCommand"),
-            ("commands.make.release", "ReleaseCommand"),
+            ("commands.make.changelog", "ChangelogMakeCommand"),
+            ("commands.make.release", "ReleaseMakeCommand"),
         ]
 
         for module_name, class_name in command_classes:
@@ -49,7 +49,7 @@ class CommandManager:
 
                 self.load_command(instance)
             except Exception as e:
-                logging.warning(f"⚠️ Skipping {class_name}: {e}")
+                logging.warning("⚠️ Skipping %s: %s", class_name, e)
 
 
     def load_command(self, command_class):
@@ -65,7 +65,8 @@ class CommandManager:
         """
         root_parsers = {}
         for command in self.commands:
-            if hasattr(command, 'COMMAND_ROOT') and command.COMMAND_ROOT in ROOT_COMMANDS.__dict__.values():
+            if (hasattr(command, 'COMMAND_ROOT') 
+                and command.COMMAND_ROOT in ROOT_COMMANDS.__dict__.values()):
                 if command.COMMAND_ROOT not in root_parsers:
                     root_parsers[command.COMMAND_ROOT] = subparsers.add_parser(
                         command.COMMAND_ROOT, help=f"{command.COMMAND_ROOT} related commands"
@@ -110,4 +111,4 @@ class CommandManager:
             if command.COMMAND_NAME == root_command:
                 command.run(args)
                 return
-        logging.warning("Unknown subcommand: %s %s", root_command)
+        logging.warning("Unknown subcommand: %s", root_command)

@@ -9,7 +9,7 @@
 from commands.base import BaseCommand, ROOT_COMMANDS
 
 
-class ReleaseCommand(BaseCommand):
+class ReleaseMakeCommand(BaseCommand):
     """
     Release command class.
     """

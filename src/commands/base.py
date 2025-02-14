@@ -56,7 +56,6 @@ class BaseCommand(ABC):
             if 'default' in args:
                 if args.default:
                     setattr(args, arg_name, arg.get("default"))
-                    pass
 
             # Check if argument is missing
             if not hasattr(args, arg_name) or getattr(args, arg_name) is None:
@@ -87,7 +86,7 @@ class BaseCommand(ABC):
                         ]
                         answers = inquirer.prompt(questions)
                         setattr(args, arg_name, answers[arg_name])
-                    else: 
+                    else:
                         print("Type not supported")
                 else:
                     # Use default if present

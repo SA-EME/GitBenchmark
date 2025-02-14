@@ -7,7 +7,6 @@
   file that was distributed with this source code.
 
 """
-from config.index import config
 
 from commands.base import BaseCommand, ROOT_COMMANDS
 
@@ -21,14 +20,22 @@ class CommitMakeCommand(BaseCommand):
 
     COMMAND_NAME = 'commit'
     COMMAND_DESCRIPTION = 'commit the of the project'
-    COMMAND_ARGS = [
+
+    COMMAND_FLAGS = [
+        {"name": "--verbose", "action": "store_true", "help": "Active verbose"}
+    ]
+
+    def __init__(self):
+        super().__init__()
+        self.COMMAND_ARGS = [
         {
             "name": "type",
             "help": "Type of commit",
             "type": list,
             "default": "chore: initial commit",
             "message": "Quel type de commit voulez-vous effectuer ?",
-            "choices": config.ConventionalCommits.type},
+            "choices": self.config.ConventionalCommits.type
+        },
         {
             "name": "scope",
             "help": "Scope of commit",
@@ -36,7 +43,8 @@ class CommitMakeCommand(BaseCommand):
             "default": "chore: initial commit",
             "message": "Quel scope ?",
             "choices": ['frontend', 'backend'],
-            "optional": not config.Scope.enabled},
+            "optional": not self.config.Scope.enabled
+        },
         {
             "name": "message",
             "help": "Message of commit",
@@ -44,9 +52,6 @@ class CommitMakeCommand(BaseCommand):
             "default": "chore: initial commit",
             "message": "Quel messages ?"
          }
-    ]
-    COMMAND_FLAGS = [
-        {"name": "--verbose", "action": "store_true", "help": "Active verbose"}
     ]
 
     def commit(self, args):
@@ -63,9 +68,10 @@ class CommitMakeCommand(BaseCommand):
             print("Verbose mode activated")
         self.commit(args)
 
+    def register(self):
+        super().register()
+
     def rollback(self):
         super().rollback()
         self.execute_command("git reset --soft HEAD~1")
 
-    def register(self):
-        super().register()

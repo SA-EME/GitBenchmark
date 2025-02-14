@@ -6,29 +6,32 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
-from commands.base import BaseCommand, ROOT_COMMANDS
 from datetime import datetime
+
+from commands.base import BaseCommand, ROOT_COMMANDS
 from modules.commits.commit import get_filtered_commits
 from modules.versioning.release import get_latest_release
 from modules.versioning.manager import determine_version
 
 from modules.changelog.generator import generate_changelog
-
 from stacktrace import stacktrace_manager
 
 from env import OWN_REP
 
-class ChangelogCommand(BaseCommand):
+class ChangelogMakeCommand(BaseCommand):
     """
-    Release command class.
+    Changelog command class.
     """
 
     COMMAND_ROOT = ROOT_COMMANDS.make
 
     COMMAND_NAME = 'changelog'
-    COMMAND_DESCRIPTION = 'Create a new changelog entry'
+    COMMAND_DESCRIPTION = 'create a new changelog entry'
+
+    changelog_output = None
 
     def run(self, args):
+        super().run()
         print(f"Running changelog command with args: {args} ")
         release_date = datetime.now().strftime("%Y-%m-%d")
         published_at_date, tag_name = get_latest_release(OWN_REP)
@@ -39,11 +42,12 @@ class ChangelogCommand(BaseCommand):
             print("No new commits found")
             return
 
-        changelog_output = generate_changelog(new_version, release_date, filtered_commits)
-        stacktrace_manager.register_action(self.full_name(), "success", content=changelog_output)
+        self.changelog_output = generate_changelog(new_version, release_date, filtered_commits)
 
     def rollback(self):
         super().rollback()
+        # TODO Do something
 
     def register(self):
-        super().register()
+        stacktrace_manager.register_action(self.full_name(), "success",
+                                           content=self.changelog_output)

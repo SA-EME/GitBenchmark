@@ -12,7 +12,7 @@ from commands.base import BaseCommand, ROOT_COMMANDS
 
 from __config__ import PATH
 
-from env import default_env
+from env import DEFAILT_ENV
 
 class InitMakeCommand(BaseCommand):
     """
@@ -25,12 +25,13 @@ class InitMakeCommand(BaseCommand):
     COMMAND_NAME = 'init'
     COMMAND_DESCRIPTION = 'Init gitbenchmark to the project'
     COMMAND_ARGS = [
-        {"name": "existing", "help": "add gitbenchmark to existing project", "type": bool, "default": False,
-         "message": "Add gitbenchmark to existing project ?"},
+        {"name": "existing", "help": "add gitbenchmark to existing project", "type": bool,
+         "default": False, "message": "Add gitbenchmark to existing project ?"},
 
     ]
     COMMAND_FLAGS = [
-        {"name": "--message", "action": "store_true", "help": "Increment the minor version", "type": str, "default": "chore: initial commit"},
+        {"name": "--message", "action": "store_true", "help": "Increment the minor version", "type": str,
+         "default": "chore: initial commit"},
         {"name": "--branch", "action": "store", "help": "Set the main branch"}
     ]
 
@@ -39,16 +40,18 @@ class InitMakeCommand(BaseCommand):
 
         # create .env
         with open(os.path.join(WORKSPACE, '.env'), 'w') as f:
-            f.write(default_env)
+            f.write(DEFAILT_ENV)
 
-        default_gitignore = """# Gitbenchmark
+        default_gitignore = """
+# Gitbenchmark
+
 .gitbenchmark/.env
 .gitbenchmark/stacktrace.json
 .gitbenchmark/app.log
 """
 
         # create .gitignore
-        with open(os.path.join(os.getcwd(), '.gitignore'), 'w') as f:
+        with open(os.path.join(os.getcwd(), '.gitignore'), 'w', encoding='utf8') as f:
             f.write(default_gitignore)
 
     def initialize_project(self, existing: bool, main_branch: str, release_branch: str):
@@ -72,15 +75,15 @@ class InitMakeCommand(BaseCommand):
 
         if not args.existing:
             self.initialize_config()
-        else : 
+        else:
             # check if git is initialized
             if subprocess.run(["git", "status"]).returncode != 0:
                 print("Git is not initialized, please choose existing value to False")
                 return
         self.initialize_project(args.existing, main_branch, release_branch)
 
-    def rollback(self):
-        super().rollback()
-
     def register(self):
         super().register()
+
+    def rollback(self):
+        super().rollback()

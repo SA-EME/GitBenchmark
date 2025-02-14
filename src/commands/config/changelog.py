@@ -24,13 +24,14 @@ class ChangelogConfigCommand(BaseCommand):
     COMMAND_NAME = 'changelog'
     COMMAND_DESCRIPTION = 'create a new config file'
     COMMAND_ARGS = [
-        {"name": "versioning", "help": "enable/disable version manager", "type": bool, "default": True,
-         "message": "Use version manager ?"},
-        {"name": "logging", "help": "enable/disable changelog manager", "type": bool, "default": True,
-         "message": "Use changelog manager ?"},
-        {"name": "commit", "help": "enable/disable conventional commit", "type": bool, "default": True,
-         "message": "Use changelog manager ?"},
-        {"name": "message", "help": "Message of commit", "type": str, "default": "chore: initial commit", "message": "Quel messages ?",}
+        {"name": "versioning", "help": "enable/disable version manager", "type": bool,
+         "default": True, "message": "Use version manager ?"},
+        {"name": "logging", "help": "enable/disable changelog manager", "type": bool,
+         "default": True, "message": "Use changelog manager ?"},
+        {"name": "commit", "help": "enable/disable conventional commit", "type": bool,
+         "default": True, "message": "Use changelog manager ?"},
+        {"name": "message", "help": "Message of commit", "type": str,
+         "default": "chore: initial commit", "message": "Quel messages ?",}
     ]
     COMMAND_FLAGS = [
         {"name": "--verbose", "action": "store_true", "help": "Active verbose"}
@@ -48,7 +49,7 @@ class ChangelogConfigCommand(BaseCommand):
         WORKSPACE = os.path.join(os.getcwd(), PATH)
 
         if not os.path.exists(os.path.join(os.getcwd(), PATH)):
-           os.makedirs(os.path.join(os.getcwd(), PATH))
+            os.makedirs(os.path.join(os.getcwd(), PATH))
 
         config_content = default_config.format(
             versioning=args.versioning,
@@ -58,7 +59,7 @@ class ChangelogConfigCommand(BaseCommand):
         )
 
 
-        with open(os.path.join(WORKSPACE, 'config.toml'), 'w') as f:
+        with open(os.path.join(WORKSPACE, 'config.toml'), 'w', encoding='utf8') as f:
             f.write(config_content)
 
     def register(self):

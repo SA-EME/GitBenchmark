@@ -6,13 +6,15 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
-from commands.base import BaseCommand
+from commands.base import BaseCommand, ROOT_COMMANDS
 
-class RollbackCommand(BaseCommand):
+
+class RollbackMakeCommand(BaseCommand):
     """
-    Rollback command class.
+    Release command class.
     """
-    REQUIRED_CONFIG = False
+
+    COMMAND_ROOT = ROOT_COMMANDS.make
 
     COMMAND_NAME = 'rollback'
     COMMAND_DESCRIPTION = 'rollback everything before last commit'
@@ -23,8 +25,11 @@ class RollbackCommand(BaseCommand):
         super().run(args)
         print("Rollback")
 
-    def rollback(self):
-        pass
-
     def register(self):
+        super().register()
+
+    def rollback(self):
+        """
+        remove rollback system for the rollback command
+        """
         pass

@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 from __config__ import PATH
 
 
-default_env = """# Log
+DEFAILT_ENV = """# Log
 LOG_LEVEL=WARN
 LOG_FILE=None
 
