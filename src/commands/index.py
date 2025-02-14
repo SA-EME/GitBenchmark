@@ -34,10 +34,13 @@ if args.root_command:
     if hasattr(args, subcommand_attr):
         subcommand = getattr(args, subcommand_attr)
         if subcommand:
-            manager.run_command(args.root_command, subcommand, args)
+            manager.run_subcommand(args.root_command, subcommand, args)
         else:
             parser.print_help()
     else:
-        parser.print_help()
+        if hasattr(args, "root_command"):
+            manager.run_command(args.root_command, args)
+        else :
+            parser.print_help()
 else:
     parser.print_help()

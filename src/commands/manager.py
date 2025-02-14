@@ -31,6 +31,7 @@ class CommandManager:
         Dynamically load all orders and save them in the system.
         """
         command_classes = [
+            ("commands.rollback", "RollbackCommand"),
             ("commands.make.init", "InitMakeCommand"),
             ("commands.config.init", "InitConfigCommand"),
             ("commands.make.commit", "CommitMakeCommand"),
@@ -84,7 +85,7 @@ class CommandManager:
             subparser.add_argument(flag["name"], action=flag["action"], help=flag["help"])
         subparser.set_defaults(func=command.run)
 
-    def run_command(self, root_command, subcommand_name, args):
+    def run_subcommand(self, root_command, subcommand_name, args):
         """
         Run the command with the given root command and subcommand name.
         Args:
@@ -97,3 +98,16 @@ class CommandManager:
                 command.run(args)
                 return
         logging.warning("Unknown subcommand: %s %s", root_command, subcommand_name)
+
+    def run_command(self, root_command, args):
+        """
+        Run the command with the given root command and subcommand name.
+        Args:
+            command (str): The root command (e.g., 'make', 'config').
+            args (Namespace): The arguments passed to the command.
+        """
+        for command in self.commands:
+            if command.COMMAND_NAME == root_command:
+                command.run(args)
+                return
+        logging.warning("Unknown subcommand: %s %s", root_command)
