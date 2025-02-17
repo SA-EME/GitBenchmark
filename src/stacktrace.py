@@ -63,6 +63,24 @@ class StackTraceManager:
         with open(self.log_file, 'w', encoding='utf8') as file:
             json.dump(self.logs, file, indent=4)
 
+    def get_rollback_command(self, command: str):
+        """
+        Get rollback command by name
+        
+        Args:
+            command (str): The command or action that was executed.
+        """
+        from commands.index import manager
+
+        module_path, class_name = command.split(':')
+        module_path = module_path.replace('/', '.').replace('.py', '')
+
+        for cmd in manager.commands:
+            if cmd.__module__ == module_path and cmd.__class__.__name__ == class_name:
+                return cmd
+
+        return None
+
     def register_action(self, command, status, content=None):
         """
         Register a new log entry to the stacktrace.

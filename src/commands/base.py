@@ -6,6 +6,9 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
+import sys
+import os
+import inspect
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -39,7 +42,10 @@ class BaseCommand(ABC):
     COMMAND_NAME = ''
     COMMAND_DESCRIPTION = ''
     COMMAND_ARGS = []
-    COMMAND_FLAGS = [
+    COMMAND_FLAGS = []
+
+    # default commands flags
+    __COMMAND_FLAGS = [
         {"name": "--default", "action": "store_true", "help": "Use default values"},
     ]
 
@@ -110,12 +116,15 @@ class BaseCommand(ABC):
         self.__setup_inquierer(args)
         self.register()
 
+    def get_command_flags(self):
+        return self.__COMMAND_FLAGS + self.COMMAND_FLAGS
+
     @abstractmethod
     def register(self):
         """
         Register the command.
         """
-        stacktrace_manager.register_action(self.full_name(), 'registered', None)
+        stacktrace_manager.register_action(self.references(), 'registered', None)
 
 
     @abstractmethod
@@ -128,4 +137,14 @@ class BaseCommand(ABC):
         """
         Get the full name of the command.
         """
-        return f"{self.COMMAND_ROOT}:{self.COMMAND_NAME}"
+        return f"{self.COMMAND_ROOT}:{self.COMMAND_NAME}".replace('None', 'main'), # Replace command without subcommand by main command
+
+    def references(self) -> str:
+        """
+        Get the reference of the command
+        """
+        child_class_file = inspect.getfile(self.__class__)
+        main_file_path = os.path.abspath(sys.modules['__main__'].__file__)
+        main_dir = os.path.dirname(main_file_path)
+        file = os.path.relpath(child_class_file, start=main_dir)
+        return f"{file}:{self.__class__.__name__}"
