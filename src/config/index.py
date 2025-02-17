@@ -35,8 +35,9 @@ def read_config(file_path) -> Config|None:
                 return Config(**config_dict)
         except toml.TomlDecodeError as e:
             logging.error("Error in config %s", e)
+            exit()
     else :
-        logging.error("Error: Configuration file '%s' not found.", file_path)
+        logging.warning("Configuration file '%s' not found.", file_path)
 
     return None
 
