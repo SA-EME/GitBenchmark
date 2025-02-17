@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 from __config__ import PATH
 
 
-DEFAILT_ENV = """# Log
+DEFAULT_ENV = """# Log
 LOG_LEVEL=WARN
 LOG_FILE=None
 
@@ -65,7 +65,7 @@ def get_env(key: str, required=False, default=None, cast=None, **kwargs):
     return value
 
 
-LOG_LEVEL: str = get_env("LOG_LEVEL", True, "INFO", str)
+LOG_LEVEL: str = get_env("LOG_LEVEL", True, "ERROR", str)
 LOG_FILE: str = get_env("LOG_FILE", False, None, str)
 
 PLATFORM: str = get_env("PLATFORM", True, "", str).upper()
