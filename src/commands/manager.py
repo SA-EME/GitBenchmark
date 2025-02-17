@@ -6,6 +6,7 @@
   For the full copyright and license information, please view the LICENSE
   file that was distributed with this source code.
 """
+import os
 import logging
 
 from commands.base import ROOT_COMMANDS
@@ -28,12 +29,11 @@ class CommandManager:
 
     def load_commands(self):
         """
-        Dynamically load all orders and save them in the system.
+        Dynamically load all commands and save them in the system.
         """
         command_classes = [
+            ("commands.init", "InitCommand"),
             ("commands.make.rollback", "RollbackMakeCommand"),
-            ("commands.make.init", "InitMakeCommand"),
-            ("commands.config.init", "InitConfigCommand"),
             ("commands.make.commit", "CommitMakeCommand"),
             ("commands.config.changelog", "ChangelogConfigCommand"),
             ("commands.make.changelog", "ChangelogMakeCommand"),
@@ -46,7 +46,8 @@ class CommandManager:
                 command_class = getattr(module, class_name)
 
                 instance = command_class()
-
+                if (instance.REQUIRED_CONFIG and not os.path.exists(os.path.join('.gitbenchmark', '.env'))):
+                    continue
                 self.load_command(instance)
             except Exception as e:
                 logging.warning("⚠️ Skipping %s: %s", class_name, e)
@@ -82,7 +83,7 @@ class CommandManager:
         subparser = subparsers.add_parser(command.COMMAND_NAME, help=command.COMMAND_DESCRIPTION)
         for arg in command.COMMAND_ARGS:
             subparser.add_argument(arg["name"], help=arg["help"], nargs='?', default=None)
-        for flag in command.COMMAND_FLAGS:
+        for flag in command.get_command_flags():
             subparser.add_argument(flag["name"], action=flag["action"], help=flag["help"])
         subparser.set_defaults(func=command.run)
 
