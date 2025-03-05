@@ -8,7 +8,7 @@
 """
 from datetime import datetime
 
-from commands.base import BaseCommand, ROOT_COMMANDS
+from cmd.base import BaseCommand, ROOT_COMMANDS
 from modules.commits.commit import get_filtered_commits
 from modules.versioning.release import get_latest_release
 from modules.versioning.manager import determine_version
@@ -31,8 +31,7 @@ class ChangelogMakeCommand(BaseCommand):
     changelog_output = None
 
     def run(self, args):
-        super().run()
-        print(f"Running changelog command with args: {args} ")
+        super().run(args)
         release_date = datetime.now().strftime("%Y-%m-%d")
         published_at_date, tag_name = get_latest_release(OWN_REP)
         filtered_commits = get_filtered_commits(OWN_REP, published_at_date)

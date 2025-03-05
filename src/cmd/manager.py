@@ -8,8 +8,10 @@
 """
 import os
 import logging
+import importlib
+import commands
 
-from commands.base import ROOT_COMMANDS
+from cmd.base import ROOT_COMMANDS
 
 from plugin import load_plugins
 
@@ -31,24 +33,20 @@ class CommandManager:
         """
         Dynamically load all commands and save them in the system.
         """
-        command_classes = [
-            ("commands.init", "InitCommand"),
-            ("commands.make.rollback", "RollbackMakeCommand"),
-            ("commands.make.commit", "CommitMakeCommand"),
-            ("commands.config.changelog", "ChangelogConfigCommand"),
-            ("commands.make.changelog", "ChangelogMakeCommand"),
-            ("commands.make.release", "ReleaseMakeCommand"),
-        ]
-
-        for module_name, class_name in command_classes:
+        for module_name in commands.__all__:
             try:
-                module = __import__(module_name, fromlist=[class_name])
-                command_class = getattr(module, class_name)
+                module = importlib.import_module(module_name)
+                command_name = module_name.split(".")[-1].capitalize()
+                command_sub_name = module_name.split(".")[-2].capitalize() if len(module_name.split(".")) > 2 else ""
+                class_name = command_name + command_sub_name  + "Command"
 
-                instance = command_class()
-                if (instance.REQUIRED_CONFIG and not os.path.exists(os.path.join('.gitbenchmark', '.env'))):
-                    continue
-                self.load_command(instance)
+                if hasattr(module, class_name):
+                    command_class = getattr(module, class_name)
+                    instance = command_class()
+
+                    if (instance.REQUIRED_CONFIG and not os.path.exists(os.path.join('.gitbenchmark', '.env'))):
+                        continue
+                    self.load_command(instance)
             except Exception as e:
                 logging.warning("⚠️ Skipping %s: %s", class_name, e)
 
@@ -57,7 +55,6 @@ class CommandManager:
         """
         Load an order and save it in the system.
         """
-        # command_instance = command_class()
         self.commands.append(command_class)
 
     def add_commands_to_parser(self, subparsers):

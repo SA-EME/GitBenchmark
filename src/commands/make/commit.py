@@ -8,7 +8,7 @@
 
 """
 
-from commands.base import BaseCommand, ROOT_COMMANDS
+from cmd.base import BaseCommand, ROOT_COMMANDS
 
 
 class CommitMakeCommand(BaseCommand):
@@ -22,7 +22,6 @@ class CommitMakeCommand(BaseCommand):
     COMMAND_DESCRIPTION = 'commit the of the project'
 
     COMMAND_FLAGS = [
-        {"name": "--verbose", "action": "store_true", "help": "Active verbose"}
     ]
 
     def __init__(self):
@@ -64,12 +63,10 @@ class CommitMakeCommand(BaseCommand):
 
     def run(self, args):
         super().run(args)
-        if args.verbose:
-            print("Verbose mode activated")
         self.commit(args)
 
     def register(self):
-        super().register()
+        pass # No need to register this command
 
     def rollback(self):
         super().rollback()

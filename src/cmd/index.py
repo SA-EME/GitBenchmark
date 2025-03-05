@@ -9,7 +9,7 @@
 
 
 import argparse
-from commands.manager import CommandManager
+from cmd.manager import CommandManager
 
 from __config__ import NAME, VERSION
 
