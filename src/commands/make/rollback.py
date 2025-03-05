@@ -7,7 +7,7 @@
   file that was distributed with this source code.
 """
 import logging
-from commands.base import BaseCommand, ROOT_COMMANDS
+from cmd.base import BaseCommand, ROOT_COMMANDS
 
 from stacktrace import stacktrace_manager
 

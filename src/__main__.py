@@ -11,4 +11,4 @@ import log as log  # noqa # pylint: disable=unused-import
 
 if __name__ == "__main__":
     # import all the commands, default and plugin commands
-    from commands import index as index  # noqa # pylint: disable=unused-import
+    import cmd.index as index  # noqa # pylint: disable=unused-import

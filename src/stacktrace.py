@@ -70,7 +70,7 @@ class StackTraceManager:
         Args:
             command (str): The command or action that was executed.
         """
-        from commands.index import manager
+        from cmd.index import manager
 
         module_path, class_name = command.split(':')
         module_path = module_path.replace('/', '.').replace('.py', '')

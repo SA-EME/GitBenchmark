@@ -17,7 +17,7 @@ import importlib.util
 from __config__ import PATH
 
 # used to export the BaseCommand class and ROOT_COMMANDS to use them in the plugins
-from commands.base import BaseCommand as BaseCommand, ROOT_COMMANDS as ROOT_COMMANDS # noqa # pylint: disable=unused-import
+from cmd.base import BaseCommand as BaseCommand, ROOT_COMMANDS as ROOT_COMMANDS # noqa # pylint: disable=unused-import
 from config.index import config, update_config # noqa # pylint: disable=unused-import
 
 class GBPlugin(ABC):

@@ -8,7 +8,7 @@
 """
 import os
 
-from commands.base import BaseCommand, ROOT_COMMANDS
+from cmd.base import BaseCommand, ROOT_COMMANDS
 
 from __config__ import PATH
 

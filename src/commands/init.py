@@ -9,7 +9,7 @@
 import os
 import subprocess
 import logging
-from commands.base import BaseCommand
+from cmd.base import BaseCommand
 
 from __config__ import PATH
 
