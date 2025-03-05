@@ -52,12 +52,12 @@ class InitCommand(BaseCommand):
         with open(os.path.join(self.WORKSPACE, '.env'), 'w') as f:
             f.write(DEFAULT_ENV)
 
-        default_gitignore = """
-# Gitbenchmark
+        default_gitignore = """# Gitbenchmark
 
 .gitbenchmark/.env
 .gitbenchmark/stacktrace.json
 .gitbenchmark/app.log
+.gitbenchmark/plugins
 """
 
         # create .gitignore
@@ -90,15 +90,21 @@ class InitCommand(BaseCommand):
             f.write(config_content)
 
     def run(self, args):
+        if os.path.exists(os.path.join(os.getcwd(), PATH)):
+            logging.error(".gitbenchmark already init")
+            return
+
         super().run(args)
+        os.makedirs(os.path.join(os.getcwd(), PATH))
         main_branch = "main"
         release_branch = "release"
 
         if "branch" in args:
             main_branch = args.branch
 
-        if not os.path.exists(os.path.join(os.getcwd(), PATH)):
-            os.makedirs(os.path.join(os.getcwd(), PATH))
+
+
+ 
 
         if not args.existing:
             self.initialize_config()

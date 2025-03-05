@@ -1,3 +1,12 @@
+"""
+  Gitbenchmark
+
+  (c) SAEME
+
+  For the full copyright and license information, please view the LICENSE
+  file that was distributed with this source code.
+"""
+
 from utils.version import change_version, get_version_type, VERSOION_PRIORITY
 
 from config.index import config

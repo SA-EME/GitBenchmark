@@ -15,7 +15,7 @@ from dataclasses import dataclass
 import subprocess
 import inquirer
 
-from config.index import config
+from config.index import config, Config
 from stacktrace import stacktrace_manager
 
 @dataclass
@@ -47,9 +47,10 @@ class BaseCommand(ABC):
     # default commands flags
     __COMMAND_FLAGS = [
         {"name": "--default", "action": "store_true", "help": "Use default values"},
+        {"name": "--verbos", "action": "store_true", "help": "Active verbose"} # TODO need to implement with log system
     ]
 
-    config = None
+    config: None|Config = None
 
     def __setup_inquierer(self, args):
         """
@@ -106,7 +107,7 @@ class BaseCommand(ABC):
 
     def __init__(self):
         if self.REQUIRED_CONFIG:
-            self.config = config
+            self.config: Config = config
 
     @abstractmethod
     def run(self, args):

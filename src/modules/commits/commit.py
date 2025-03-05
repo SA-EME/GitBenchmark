@@ -1,7 +1,20 @@
+"""
+  Gitbenchmark
+
+  (c) SAEME
+
+  For the full copyright and license information, please view the LICENSE
+  file that was distributed with this source code.
+"""
+
+from datetime import datetime
+
 from utils.request import request
 from utils.date import get_date
 
-def get_filtered_commits(repo, since_date):
+from env import OWN_REP
+
+def get_filtered_commits(repo = OWN_REP, since_date=datetime.strptime('2000-01-01','%Y-%m-%d')):
     """
     Retrieves and filters commits after a specific date.
 
