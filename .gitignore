@@ -1,6 +1,8 @@
-# application
-.gitbenchmark/
-.env
+# Gitbenchmark
+.gitbenchmark/.env
+.gitbenchmark/stacktrace.json
+.gitbenchmark/app.log
+.gitbenchmark/plugins
 
 # virtualenv
 venv/
@@ -12,14 +14,8 @@ dist/
 # python
 __pycache__/
 
-log.json
-
 # poetry
 poetry.lock
 
 # ruff
 .ruff_cache/
-
-
-# vscode
-temp/
